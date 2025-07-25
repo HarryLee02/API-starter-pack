@@ -1,0 +1,25 @@
+<h4 id="h_01HPYBFCZJNRAQ3FDY3SDHEHFJ" class="modal-title">HLS (HTTP Live Streaming) is one of the most popular streaming protocols. Since it is using HTTP for data streaming, it is widely supported on almost all the devices. Similarly, DASH (Dynamic Adaptive Streaming over Http) can also stream using HTTP. With OptiSigns, you can easily display your HLS,DASH Video Stream on your Digital Screen using the Video Stream app. It is supported on all the devices(Android,FireOS,Windows, Linux, Raspberry Pi etc).</h4>
+<p><img src="https://support.optisigns.com/hc/article_attachments/8369566408083" alt="video-streaming-slider-1.png"></p>
+<p>This article will guide you through how to create and use the Video Stream app</p>
+<h3 id="h_01HPYBFCZJKYB3M63866G8MH63" class="rich-content-viewer_headerTwo__3f-vr rich-content-viewer_elementSpacing__208Ie blog-post-title-font _3aQMT _2J4pr css-x4x4qs rich-content-viewer_left__2p1aK _158eo _3_7DB"><strong>Let's jump in and get started:</strong></h3>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Go to our portal: <a class="link-viewer_link__2qJYG blog-link-hashtag-color y_1_u" href="http://app.optisigns.com/" target="_top" rel="noreferrer">http://app.optisigns.com/</a></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Then go to Files/Assets, Click on "App", search for and add the Video Streaming app to your Account.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"><img src="https://support.optisigns.com/hc/article_attachments/8369551736723" alt="mceclip0.png"></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Enter your Video Stream app information:</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB wysiwyg-text-align-center"><img src="https://support.optisigns.com/hc/article_attachments/8369552339219" alt="mceclip1.png" width="468" height="292"></p>
+<ul>
+<li class="rich-content-viewer_elementSpacing__208Ie">
+<u>Name</u>: Name of your Video Stream app, this is the name of the app in your asset list. It will <u><strong>not</strong></u> be displayed on your screens.</li>
+<li class="rich-content-viewer_elementSpacing__208Ie">
+<span class="wysiwyg-underline">URL</span>: the URL link to the Video Stream link you want to display.</li>
+</ul>
+<p>Here are some free public HLS URLs:</p>
+<pre class="modal-title"><a href="https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8">https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8</a><br><br><a href="https://content.jwplatform.com/manifests/yp34SRmf.m3u8">https://content.jwplatform.com/manifests/yp34SRmf.m3u8</a> </pre>
+<p>Click Save to save your asset.</p>
+<h2 id="h_01HPYBFCZJ707QHWWJWPG7TJYH" class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">That's all!</h2>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Congratulation! You have created your Video Stream App. Then you can assign it to your screens.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">You can change the wall any time by click on it in the Files/Assets tab.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">You can put the walls in a Playlist, Schedule too.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"> </p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">If you have any additional questions, concerns or any feedback about OptiSigns, feel free to reach out to our support team at <a href="mailto:support@optisigns.com" target="_self" rel="undefined">support@optisigns.com</a></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"> </p>

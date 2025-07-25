@@ -1,0 +1,2 @@
+<p>You can adjust scrolling, transition speeds of all Social, Facebook, Instagram, Twitter, News, etc. walls by selecting Custom Speed and adjust to the speed you desired.</p>
+<p><img src="https://support.optisigns.com/hc/article_attachments/360047007294" alt="mceclip0.png"></p>

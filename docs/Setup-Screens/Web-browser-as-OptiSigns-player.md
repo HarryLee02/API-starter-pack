@@ -1,0 +1,1 @@
+<p><a href="https://www.optisigns.com/blog/how-to-use-optisigns-with-browser">Click here</a> for detail step by step article on how to use Chrome (or any web browser) as OptiSigns player.</p>

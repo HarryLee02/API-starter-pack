@@ -15,6 +15,7 @@ class Colors:
     GREEN = "\033[1;92m"
     YELLOW = "\033[1;93m"
     RED = "\033[1;91m"
+    BLUE = "\033[1;94m"
     RESET = "\033[0m"
     def log(text, color):
         return f"{color}{text}{Colors.RESET}" 
@@ -22,21 +23,22 @@ class Colors:
 def menu():
     print(Colors.log("="*100, Colors.YELLOW))
     print("""
-      __
- /\  |__) |
-/~~\ |    |
-          __  ___       __  ___  ___  __  
-         /__`  |   /\  |__)  |  |__  |__) 
-         .__/  |  /~~\ |  \  |  |___ |  \ 
-                      __        __ 
-                     |__)  /\  /  ` |__/  
-                     |    /~~\ \__, |  \ 
+                    __
+                /\  |__) |
+                /~~\ |    |
+                        __  ___       __  ___  ___  __  
+                        /__`  |   /\  |__)  |  |__  |__) 
+                        .__/  |  /~~\ |  \  |  |___ |  \ 
+                                    __        __ 
+                                    |__)  /\  /  ` |__/  
+                                    |    /~~\ \__, |  \ 
         """)
     print(Colors.log("="*100, Colors.YELLOW))
 
 if __name__ == "__main__":
     menu()
     total_articles = 0
+    articles_per_category = {}
     url = "https://support.optisigns.com/api/v2/help_center"
 
     with open("./categories.json", "w", encoding="utf-8") as f:
@@ -53,18 +55,18 @@ if __name__ == "__main__":
 
     if not os.path.exists("./docs"):
         os.mkdir("./docs")
-        print(Colors.log(f"[+] Directory './docs' not found, created successfully!", Colors.GREEN))
+        print(Colors.log(f"[+] Directory './docs' not found, created successfully!", Colors.BLUE))
     else:
-        print(Colors.log(f"[+] Directory './docs' found, skipping creation.", Colors.YELLOW))
+        print(Colors.log(f"[+] Directory './docs' found, skipping creation.", Colors.BLUE))
 
     for category in f_json["categories"]:
         category["name"] = re.sub(r'\s*[/\:?*<>"|]\s*', " ", category["name"])
         category["name"] = re.sub(r' ', "-", category["name"])
         try:
             os.mkdir(f"./docs/{category['name']}")
-            print(Colors.log(f"[+] Directory './docs/{category['name']}' created successfully!", Colors.GREEN))
+            print(Colors.log(f"[+] Directory './docs/{category['name']}' created successfully!", Colors.BLUE))
         except FileExistsError:
-            print(Colors.log(f"[-] Directory './docs/{category['name']}' already exists.", Colors.YELLOW))
+            print(Colors.log(f"[-] Directory './docs/{category['name']}' already exists.", Colors.BLUE))
         except Exception as e:
             print(Colors.log(f"[-] An error occurred: {e}", Colors.RED))
             continue
@@ -73,6 +75,7 @@ if __name__ == "__main__":
 
         with open(f"./docs/{category['name']}/articles.json", "w", encoding="utf-8") as f:
             articles = requests.get(url+f"/categories/{category['id']}/articles").json()["articles"]
+            articles_per_category[category["name"]] = len(articles)
             json.dump(articles, f, ensure_ascii=False)
             f.close()
             
@@ -83,19 +86,16 @@ if __name__ == "__main__":
             with open(f"./docs/{category['name']}/{article['title']}.md", "w", encoding="utf-8") as f:
                 f.write(markdown.markdown(article["body"]))
                 f.close()
-            print(Colors.log(f"Article '{article['title']}' saved successfully!", Colors.GREEN))
+            print(Colors.log(f"[+] Article '{article['title']}' saved successfully!", Colors.GREEN))
             total_articles += 1
-        print(Colors.log("="*100, Colors.YELLOW))
+        print(Colors.log("-"*100, Colors.YELLOW))
 
-    print(Colors.log(f"Task completed!", Colors.GREEN))
-    print(Colors.log(f"Total articles: {total_articles}", Colors.GREEN))
+    print(Colors.log(f"[+] Task completed!", Colors.GREEN))
+    print(Colors.log(f"[+] Total articles: {total_articles}", Colors.GREEN))
 
+    print(Colors.log("-"*100, Colors.YELLOW))
+
+    print(Colors.log("Articles per category:", Colors.GREEN))
+    for category, articles in articles_per_category.items():
+        print(Colors.log(f"[+] {category}: {articles}", Colors.GREEN))
     exit()
-
-
-
-        
-
-    
-
-

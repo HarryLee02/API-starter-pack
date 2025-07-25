@@ -1,0 +1,21 @@
+<h2 id="h_01HQ0BC000M7ST0A02A1BC2N07">Introduction</h2>
+<p>Sometimes, you need to re-use a playlist inside another playlist. This feature is called a nested playlist or sub-playlist.</p>
+<p>For example, there may be a need for a common or global playlist that you want for all of your screens but require there to be some exceptions for regional-specific content to also be shown. Nested Playlists allow you to be able to manage that in an organized manner.</p>
+<p>This article assumes you already know how to <a href="https://support.optisigns.com/hc/en-us/articles/28295104605843" target="_blank" rel="noopener noreferrer">create and use Playlists</a> with OptiSigns. <br>If you're not sure, check out that article first.</p>
+<h2 id="h_01HQ0BC000T7TRV35K8B779SN8">Let's dive in:</h2>
+<p>In this example, we have a Global Playlist that has corporate-level content, and we have Regional playlist where it needs to play the Global Playlist content plus some localized content.</p>
+<p>To add an existing Global Playlist into the new Regional playlist, you can navigate to the Playlist tab.</p>
+<p>Click "Add Playlist" button</p>
+<p><img src="https://support.optisigns.com/hc/article_attachments/360058309474" alt="mceclip2.png"></p>
+<p>Select the playlist you want to add as nested playlist.<br>In this case it's the Global Playlist.<br>Then click Add.</p>
+<p><img src="https://support.optisigns.com/hc/article_attachments/360058309374" alt="mceclip1.png"></p>
+<p>Now you can see your Global Playlist inside your Regional playlist.<br>You can move the order of the Global Playlist just like any other playlist items.</p>
+<p><img src="https://support.optisigns.com/hc/article_attachments/360059221433" alt="mceclip3.png"></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">That's it, you can now assign this Regional playlist to any screens and it will play contents in the order as arranged.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Just like other playlist items, you can set limit duration of the Child playlist in the Parent playlist (to control how long this item will be played).<br>If the child playlist duration is shorter than this duration, it will be repeated till this duration is done.<br>If the child playlist duration is longer than this duration, it will get cut off at this duration.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"><img src="https://support.optisigns.com/hc/article_attachments/360065122574" alt="mceclip0.png"></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"><strong>Note: </strong>About playlist transition.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">If you set specific transition for playlist items in Global, this transition setting will remain.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"> </p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">If you have feedback on how to make the how-to guides better, please let us know at: <a class="link-viewer_link__2qJYG blog-link-hashtag-color y_1_u" href="mailto:support@optisigns.com" target="_top" rel="noreferrer">support@optisigns.com</a></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"> </p>
