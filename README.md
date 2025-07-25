@@ -6,6 +6,13 @@ This is a project showcasing how to work with API and preprocess the data before
 ## Features
 
 ## Details
+### Setup
+
+### How to run locally
+
+### Daily job logs
+
+### Example
 
 I spent 
 
