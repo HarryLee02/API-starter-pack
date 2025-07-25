@@ -3,14 +3,13 @@ import json
 import markdown
 import os
 import re
+from openai import OpenAI
+from dotenv import load_dotenv
 
-# I want to create a script capable of :
-# scrape the articles based on the category
-# auto make dirs based on the category
-# auto make files based on the article inside the category
+load_dotenv()
 
 # GET /api/v2/help_center/categories/{category_id}/articles
-
+# GET /api/v2/help_center/categories/
 class Colors:
     GREEN = "\033[1;92m"
     YELLOW = "\033[1;93m"
@@ -23,23 +22,28 @@ class Colors:
 def menu():
     print(Colors.log("="*100, Colors.YELLOW))
     print("""
-                    __
-                /\  |__) |
+                      __
+                 /\  |__) |
                 /~~\ |    |
-                        __  ___       __  ___  ___  __  
-                        /__`  |   /\  |__)  |  |__  |__) 
-                        .__/  |  /~~\ |  \  |  |___ |  \ 
-                                    __        __ 
-                                    |__)  /\  /  ` |__/  
-                                    |    /~~\ \__, |  \ 
+                         __  ___       __  ___  ___  __
+                        /__`  |   /\  |__)  |  |__  |__)
+                        .__/  |  /~~\ |  \  |  |___ |  \
+                                     __        __
+                                    |__)  /\  /  ` |__/
+                                    |    /~~\ \__, |  \
         """)
     print(Colors.log("="*100, Colors.YELLOW))
 
 if __name__ == "__main__":
     menu()
+
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+
+    client = OpenAI(api_key=openai_api_key)
+
     total_articles = 0
     articles_per_category = {}
-    url = "https://support.optisigns.com/api/v2/help_center"
+    url = os.getenv("SUPPORT_URL")
 
     with open("./categories.json", "w", encoding="utf-8") as f:
         json.dump(requests.get(url+"/categories").json(), f, ensure_ascii=False)
@@ -87,6 +91,14 @@ if __name__ == "__main__":
                 f.write(markdown.markdown(article["body"]))
                 f.close()
             print(Colors.log(f"[+] Article '{article['title']}' saved successfully!", Colors.GREEN))
+            try:
+                client.files.create(
+                    file=open(f"./docs/{category['name']}/{article['title']}.md", "rb"),
+                    purpose="assistants"
+                )
+            except Exception as e:
+                print(Colors.log(f"[-] An OpenAI error occurred: {e}", Colors.RED))
+
             total_articles += 1
         print(Colors.log("-"*100, Colors.YELLOW))
 
@@ -98,4 +110,29 @@ if __name__ == "__main__":
     print(Colors.log("Articles per category:", Colors.GREEN))
     for category, articles in articles_per_category.items():
         print(Colors.log(f"[+] {category}: {articles}", Colors.GREEN))
+
+    print(Colors.log("-"*100, Colors.YELLOW))
+
+    print(Colors.log("[+] Attach files to Vector Store", Colors.GREEN))
+
+    vector_store_id= os.getenv("OPENAI_VECTOR_STORE_ID")
+    
+    for file in client.files.list().data:
+        try:
+            client.vector_stores.files.create(
+                vector_store_id=vector_store_id,
+                file_id=file.id,
+                chunking_strategy={
+                    "type": "static",
+                    "static": {
+                        "max_chunk_size_tokens": 1200,
+                        "chunk_overlap_tokens": 300    
+                    }
+                }
+            )
+        except Exception as e:
+            print(Colors.log(f"[-] An OpenAI error occurred: {e}", Colors.RED))
+
+    print(Colors.log("[+] Files attached to Vector Store successfully!", Colors.GREEN))
+
     exit()
