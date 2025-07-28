@@ -1,0 +1,4 @@
+requests==2.32.4
+Markdown==3.8.2
+python-dotenv==1.1.1
+openai==1.97.1

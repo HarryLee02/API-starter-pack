@@ -187,10 +187,7 @@ if __name__ == "__main__":
     for category, articles in articles_per_category.items():
         print(Colors.log(f"[+] {category}: {articles}", Colors.GREEN))
 
-
     print(Colors.log("-"*100, Colors.YELLOW))
-
-
 
     current_list = client.files.list().data
 
