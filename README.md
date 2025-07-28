@@ -1,35 +1,171 @@
-# API-starter-pack
-This is a project showcasing how to work with API and preprocess the data before deploying, **NOT** a tutorial since I am also new to this.
+# API Starter Pack - Zendesk Documentation Processor
 
-## Overview
+A comprehensive tool for processing and analyzing Zendesk help center documentation using OpenAI's API. This project demonstrates how to work with APIs, preprocess data, and deploy AI-powered documentation analysis.
 
-## Features
+## 🚀 Overview
 
-## Details
-### Setup
+This project provides an automated solution for:
+- Scraping Zendesk help center articles and categories
+- Processing and organizing documentation into structured formats
+- Analyzing token usage and content distribution
+- Preparing data for AI-powered assistants and vector stores
 
-### How to run locally
+## ✨ Features
 
-### Daily job logs
+- **Automated Documentation Scraping**: Fetches articles and categories from Zendesk help center
+- **Content Organization**: Organizes articles by category in a structured file system
+- **Token Analysis**: Analyzes and visualizes token distribution across documentation
+- **OpenAI Integration**: Uploads processed files to OpenAI for AI assistant training
+- **Progress Tracking**: Detailed logging and progress monitoring
+- **Error Handling**: Robust error handling for API failures and file operations
 
-### Example
+## 🛠️ Setup
 
-I spent 
+### Prerequisites
 
-## Timeline
-Due to some personal issues, I cannot start at 24th July morning so I started at 10 am.
+- Python 3.7+
+- Zendesk API access
+- OpenAI API key
+- Required Python packages (see installation below)
 
-### Phase 1
+### Installation
 
-It took me ~2h:
-- **10:15 am UTC+7, 25th July 2025**: Repo creation & some Zendesk API, OpenAI and optisigns researchs.
-- **11:48 am UTC+7, 25th July 2025**: Lunch break ~~you have to eat *lol~~.
-- **12:30 pm UTC+7, 25th July 2025**: Start coding and take notes in README.md.
-- **01:15 pm UTC+7, 25th July 2025**: Finish coding and debugging for Phase 1. Start taking notes.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd API-starter-pack
+   ```
 
-### Phase 2
-- **02:20 pm UTC+7, 25th July 2025**: Realise that OpenAI no longer offers free trial. I stop coding to find ways to use OpenAI.
-- **02:35 pm UTC+7, 25th July 2025**: Figure it out, start coding
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
+3. **Environment Configuration**
+   Create a `.env` file in the root directory:
+   ```env
+   OPENAI_API_KEY=your_openai_api_key_here
+   SUPPORT_URL=https://your-zendesk-instance.zendesk.com/api/v2/help_center
+   ```
 
-### Phase 3
+## 🏃‍♂️ How to Run Locally
+
+### 1. Scrape Documentation
+```bash
+python scraper.py
+```
+This will:
+- Fetch all categories from your Zendesk help center
+- Download articles for each category
+- Convert articles to markdown format
+- Upload files to OpenAI for processing
+
+### 2. Analyze Token Usage
+```bash
+python count_tokens.py
+```
+This will:
+- Count tokens in all markdown files
+- Generate statistical analysis
+- Create visualizations of token distribution
+- Display file count by token ranges
+
+## 📊 Project Structure
+
+```
+API-starter-pack/
+├── scraper.py              # Main scraping script
+├── count_tokens.py         # Token analysis tool
+├── docs/                   # Processed documentation
+│   ├── category-1/
+│   │   ├── articles.json
+│   │   └── article-files.md
+│   └── category-2/
+├── static/                 # Static assets and screenshots
+├── .env                    # Environment variables
+└── README.md              # This file
+```
+
+## 📈 Daily Job Logs
+
+### Phase 1: Initial Setup & Research
+**Duration**: ~2 hours
+- Repository creation and initial setup
+- Zendesk API, OpenAI, and OptiSigns research
+- Basic project structure implementation
+
+### Phase 2: Core Development
+**Duration**: ~2 hours
+- OpenAI API integration challenges and resolution
+- File upload and vector store implementation
+- Error handling and optimization
+
+### Phase 3: Analysis & Documentation
+**Duration**: ~2 hours
+- Token analysis implementation
+- Documentation and README updates
+- Project finalization
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `OPENAI_API_KEY` | Your OpenAI API key | Yes |
+| `SUPPORT_URL` | Zendesk help center API URL | Yes |
+
+### API Endpoints Used
+
+- `GET /api/v2/help_center/categories/` - Fetch all categories
+- `GET /api/v2/help_center/categories/{id}/articles` - Fetch articles by category
+
+## 📝 Example Usage
+
+### Basic Scraping
+```python
+# The scraper will automatically:
+# 1. Load categories from Zendesk
+# 2. Create directory structure
+# 3. Download and process articles
+# 4. Upload to OpenAI
+```
+
+### Token Analysis
+```python
+# Generate comprehensive token analysis:
+# - Statistical summary
+# - Distribution visualization
+# - File categorization by token count
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+For support and questions:
+- Check the [Issues](../../issues) page
+- Review the documentation in the `docs/` folder
+- Contact the maintainers
+
+## 🔮 Future Enhancements
+
+- [ ] Add support for multiple Zendesk instances
+- [ ] Implement incremental updates
+- [ ] Add content quality analysis
+- [ ] Support for other documentation platforms
+- [ ] Enhanced visualization and reporting
+
+---
+
+**Note**: This project is designed for educational and practical purposes. Please ensure you have proper authorization to access and process the Zendesk data you're working with.

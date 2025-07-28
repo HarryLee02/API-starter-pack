@@ -1,5 +1,15 @@
 <h2 id="h_01HQ0BC000M7ST0A02A1BC2N07">Introduction</h2>
 <p>Sometimes, you need to re-use a playlist inside another playlist. This feature is called a nested playlist or sub-playlist.</p>
+<table style="border-collapse: collapse; width: 100%;" border="1">
+<tbody>
+<tr>
+<td class="wysiwyg-text-align-center" style="width: 100%;"><strong>NOTE</strong></td>
+</tr>
+<tr>
+<td style="width: 100%;">Nested Playlists are available to <strong><a href="https://www.optisigns.com/pricing" target="_blank" rel="noopener noreferrer">Standard plan</a> </strong>users and above.</td>
+</tr>
+</tbody>
+</table>
 <p>For example, there may be a need for a common or global playlist that you want for all of your screens but require there to be some exceptions for regional-specific content to also be shown. Nested Playlists allow you to be able to manage that in an organized manner.</p>
 <p>This article assumes you already know how to <a href="https://support.optisigns.com/hc/en-us/articles/28295104605843" target="_blank" rel="noopener noreferrer">create and use Playlists</a> with OptiSigns. <br>If you're not sure, check out that article first.</p>
 <h2 id="h_01HQ0BC000T7TRV35K8B779SN8">Let's dive in:</h2>

@@ -145,7 +145,7 @@
 <a name="AppleTV"></a>
 <h3 id="h_01J971Y008280N2R577Z3X9F3N">Apple TV and ChromeOS</h3>
 <p>Deployment on an Apple TV or a ChromeOS device has to be done through their respective platforms.</p>
-<p>For more, see our articles on <a href="https://support.optisigns.com/hc/en-us/articles/31695220475283-Configuring-Mass-Deployment-with-Jamf-Pro-MDM-on-Apple-Devices" target="_blank" rel="noopener noreferrer">configuring OptiSigns mass deployment on Apple devices</a> and <a href="https://support.optisigns.com/hc/en-us/articles/17353256033811-How-to-use-OptiSigns-Auto-Provisioning-Template-on-ChromeOS" target="_blank" rel="noopener noreferrer">how to use OptiSigns Auto Provisioning Template on ChromeOS</a> and</p>
+<p>For more, see our articles on <a href="https://support.optisigns.com/hc/en-us/articles/31695220475283-Configuring-Mass-Deployment-with-Jamf-Pro-MDM-on-Apple-Devices" target="_blank" rel="noopener noreferrer">configuring OptiSigns mass deployment on Apple devices</a> and <a href="https://support.optisigns.com/hc/en-us/articles/17353256033811-How-to-use-OptiSigns-Auto-Provisioning-Template-on-ChromeOS" target="_blank" rel="noopener noreferrer">how to use OptiSigns Auto Provisioning Template on ChromeOS.</a></p>
 <div class="_1Lhwj image-container"> </div>
 <div class="_1Lhwj image-container">
 <h3 id="h_01J971ZF7CK3CKZ6M0RHD38GH6" class="XzvDs _208Ie _2Dym_ blog-post-text-font blog-post-text-color _2QAo- _25MYV _2R0Lu _2Dym_"><strong>That's all! </strong></h3>
