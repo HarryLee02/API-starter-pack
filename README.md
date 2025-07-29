@@ -2,6 +2,10 @@
 
 A comprehensive tool for processing and analyzing Zendesk help center documentation using OpenAI's API. This project demonstrates how to work with APIs, preprocess data, and deploy AI-powered documentation analysis.
 
+## Demo
+
+http://174.138.30.161:8080/
+
 ## 🚀 Overview
 
 This project provides an automated solution for:
