@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  scraper:
+    build: .
+    container_name: help-center-scraper
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SUPPORT_URL=${SUPPORT_URL}
+      - OPENAI_VECTOR_STORE_ID=${OPENAI_VECTOR_STORE_ID}
+    volumes:
+      - scraper-logs:/app/logs
+    restart: "no"
+
+  log-server:
+    build: ./log-server
+    container_name: log-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - scraper-logs:/app/logs
+    restart: unless-stopped
+
+  cron:
+    image: alpine:latest
+    container_name: scraper-cron
+    volumes:
+      - scraper-logs:/app/logs
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SUPPORT_URL=${SUPPORT_URL}
+      - OPENAI_VECTOR_STORE_ID=${OPENAI_VECTOR_STORE_ID}
+    command: >
+      sh -c "
+        apk add --no-cache dcron docker-cli &&
+        echo '0 2 * * * docker run --rm -v scraper-logs:/app/logs -e OPENAI_API_KEY=$$OPENAI_API_KEY -e SUPPORT_URL=$$SUPPORT_URL -e OPENAI_VECTOR_STORE_ID=$$OPENAI_VECTOR_STORE_ID scraper' > /etc/crontabs/root &&
+        crond -f
+      "
+    restart: unless-stopped
+
+volumes:
+  scraper-logs: 
