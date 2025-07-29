@@ -3,11 +3,34 @@ import json
 import markdown
 import os
 import re
+import logging
 from datetime import datetime
 from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Setup logging
+def setup_logging():
+    """Setup logging to both file and console"""
+    # Create logs directory if it doesn't exist
+    if not os.path.exists("./logs"):
+        os.mkdir("./logs")
+    
+    # Configure logging
+    log_format = '%(asctime)s - %(levelname)s - %(message)s'
+    logging.basicConfig(
+        level=logging.INFO,
+        format=log_format,
+        handlers=[
+            logging.FileHandler('./logs/scraper.log'),
+            logging.StreamHandler()
+        ]
+    )
+    return logging.getLogger(__name__)
+
+# Initialize logger
+logger = setup_logging()
 
 # GET /api/v2/help_center/categories/{category_id}/articles
 # GET /api/v2/help_center/categories/
@@ -58,19 +81,19 @@ if __name__ == "__main__":
         json.dump(requests.get(url+"/categories").json(), f, ensure_ascii=False)
         f.close()
 
-    print(Colors.log("Categories loaded successfully!", Colors.GREEN))
+    logger.info("Categories loaded successfully!")
 
     with open("./categories.json", "r", encoding="utf-8") as f:
         f_json = json.load(f)
         f.close()
 
-    print(Colors.log("="*100, Colors.YELLOW))
+    logger.info("="*100)
 
     if not os.path.exists("./docs"):
         os.mkdir("./docs")
-        print(Colors.log(f"[+] Directory './docs' not found, created successfully!", Colors.BLUE))
+        logger.info("[+] Directory './docs' not found, created successfully!")
     else:
-        print(Colors.log(f"[+] Directory './docs' found, skipping creation.", Colors.BLUE))
+        logger.info("[+] Directory './docs' found, skipping creation.")
 
     for category in f_json["categories"]:
 
@@ -80,12 +103,12 @@ if __name__ == "__main__":
             os.mkdir(f"./docs/{category['name']}")
             print(Colors.log(f"[+] Directory './docs/{category['name']}' created successfully!", Colors.BLUE))
         except FileExistsError:
-            print(Colors.log(f"[-] Directory './docs/{category['name']}' already exists.", Colors.BLUE))
+            logger.info(f"[-] Directory './docs/{category['name']}' already exists.")
         except Exception as e:
-            print(Colors.log(f"[-] An error occurred: {e}", Colors.RED))
+            logger.error(f"[-] An error occurred: {e}")
             continue
 
-        print(Colors.log("="*100, Colors.YELLOW))
+        logger.info("="*100)
 
         with open(f"./docs/{category['name']}/articles.json", "w", encoding="utf-8") as f:
             data = requests.get(url+f"/categories/{category['id']}/articles").json()
@@ -175,19 +198,19 @@ if __name__ == "__main__":
             total_articles += 1
         print(Colors.log("-"*100, Colors.YELLOW))
 
-    print(Colors.log(f"[+] Task completed!", Colors.GREEN))
-    print(Colors.log(f"[+] Total articles: {total_articles}", Colors.GREEN))
-    print(Colors.log(f"[+] New articles: {new_articles}", Colors.GREEN))
-    print(Colors.log(f"[+] Updated articles: {updated_articles}", Colors.YELLOW))
-    print(Colors.log(f"[-] Skipped articles: {skipped_articles}", Colors.GRAY))
+    logger.info(f"[+] Task completed!")
+    logger.info(f"[+] Total articles: {total_articles}")
+    logger.info(f"[+] New articles: {new_articles}")
+    logger.info(f"[+] Updated articles: {updated_articles}")
+    logger.info(f"[-] Skipped articles: {skipped_articles}")
 
-    print(Colors.log("-"*100, Colors.YELLOW))
+    logger.info("-"*100)
 
-    print(Colors.log("Articles per category:", Colors.GREEN))
+    logger.info("Articles per category:")
     for category, articles in articles_per_category.items():
-        print(Colors.log(f"[+] {category}: {articles}", Colors.GREEN))
+        logger.info(f"[+] {category}: {articles}")
 
-    print(Colors.log("-"*100, Colors.YELLOW))
+    logger.info("-"*100)
 
     current_list = client.files.list().data
 
@@ -207,9 +230,9 @@ if __name__ == "__main__":
                 purpose="assistants"
             )
         
-    print(Colors.log("[+] Updated files successfully!", Colors.GREEN))
+    logger.info("[+] Updated files successfully!")
 
-    print(Colors.log("[+] Attach files to Vector Store", Colors.GREEN))
+    logger.info("[+] Attach files to Vector Store")
 
     vector_store_id = os.getenv("OPENAI_VECTOR_STORE_ID")
     
@@ -227,8 +250,8 @@ if __name__ == "__main__":
                 }
             )
         except Exception as e:
-            print(Colors.log(f"[-] An OpenAI error occurred: {e}", Colors.RED))
+            logger.error(f"[-] An OpenAI error occurred: {e}")
 
-    print(Colors.log("[+] Files attached to Vector Store successfully!", Colors.GREEN))
-    print(Colors.log("[+] Task completed!", Colors.GREEN))
+    logger.info("[+] Files attached to Vector Store successfully!")
+    logger.info("[+] Task completed!")
     exit()
