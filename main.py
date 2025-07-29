@@ -51,7 +51,7 @@ class Colors:
 
 def menu():
     print(logger.info("="*100))
-    print("""
+    print('''
                       __
                  /\  |__) |
                 /~~\ |    |
@@ -63,7 +63,7 @@ def menu():
                                      __        __
                                     |__)  /\  /  ` |__/
                                     |    /~~\ \__, |  \
-""")
+''')
     print(logger.info("="*100))
 
 if __name__ == "__main__":
