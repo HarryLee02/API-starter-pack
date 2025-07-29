@@ -40,9 +40,10 @@ HTML_TEMPLATE = """
     <p class="timestamp">Last updated: {{ timestamp }}</p>
     
     <div class="log-section">
-        <h2>Latest Scraper Log</h2>
+        <h2>Latest Scraper Log <span id="status-indicator" style="color: #28a745;">●</span></h2>
         <a href="/download/scraper.log" class="download-link">Download Log File</a>
-        <div class="log-content">{{ scraper_log }}</div>
+        <button onclick="toggleAutoRefresh()" id="refresh-btn" style="padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; margin-left: 10px;">Auto Refresh: ON</button>
+        <div class="log-content" id="log-content">{{ scraper_log }}</div>
     </div>
     
     <div class="log-section">
@@ -53,6 +54,55 @@ HTML_TEMPLATE = """
         {% endfor %}
         </ul>
     </div>
+    
+    <script>
+    let autoRefreshInterval;
+    let isAutoRefreshOn = true;
+    
+    // Start auto-refresh on page load
+    startAutoRefresh();
+    
+    function startAutoRefresh() {
+        autoRefreshInterval = setInterval(updateLogs, 2000); // Update every 2 seconds
+    }
+    
+    function stopAutoRefresh() {
+        clearInterval(autoRefreshInterval);
+    }
+    
+    function toggleAutoRefresh() {
+        const btn = document.getElementById('refresh-btn');
+        if (isAutoRefreshOn) {
+            stopAutoRefresh();
+            btn.textContent = 'Auto Refresh: OFF';
+            btn.style.background = '#dc3545';
+            document.getElementById('status-indicator').style.color = '#dc3545';
+        } else {
+            startAutoRefresh();
+            btn.textContent = 'Auto Refresh: ON';
+            btn.style.background = '#007bff';
+            document.getElementById('status-indicator').style.color = '#28a745';
+        }
+        isAutoRefreshOn = !isAutoRefreshOn;
+    }
+    
+    function updateLogs() {
+        fetch('/api/logs')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const logContent = document.getElementById('log-content');
+                    if (logContent.textContent !== data.logs) {
+                        logContent.textContent = data.logs;
+                        logContent.scrollTop = logContent.scrollHeight; // Auto-scroll to bottom
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error updating logs:', error);
+            });
+    }
+    </script>
 </body>
 </html>
 """
@@ -80,6 +130,19 @@ def logs():
                                 timestamp=timestamp,
                                 scraper_log=scraper_log,
                                 log_files=log_files)
+
+@app.route('/api/logs')
+def get_logs():
+    """API endpoint to get latest logs"""
+    try:
+        if os.path.exists('./logs/scraper.log'):
+            with open('./logs/scraper.log', 'r') as f:
+                log_content = f.read()
+            return {"status": "success", "logs": log_content}
+        else:
+            return {"status": "error", "message": "No log file found"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.route('/download/<filename>')
 def download_log(filename):

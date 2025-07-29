@@ -27,6 +27,11 @@ def setup_logging():
             logging.StreamHandler()
         ]
     )
+    
+    # Disable OpenAI HTTP request logs
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("openai").setLevel(logging.WARNING)
+    
     return logging.getLogger(__name__)
 
 # Initialize logger
@@ -45,7 +50,7 @@ class Colors:
         return f"{color}{text}{Colors.RESET}" 
 
 def menu():
-    print(Colors.log("="*100, Colors.YELLOW))
+    print(logger.info("="*100))
     print("""
                       __
                  /\  |__) |
@@ -59,7 +64,7 @@ def menu():
                                     |__)  /\  /  ` |__/
                                     |    /~~\ \__, |  \
 """)
-    print(Colors.log("="*100, Colors.YELLOW))
+    print(logger.info("="*100))
 
 if __name__ == "__main__":
     menu()
@@ -101,25 +106,25 @@ if __name__ == "__main__":
         category["name"] = re.sub(r' ', "-", category["name"])
         try:
             os.mkdir(f"./docs/{category['name']}")
-            print(Colors.log(f"[+] Directory './docs/{category['name']}' created successfully!", Colors.BLUE))
+            print(logger.info(f"[+] Directory './docs/{category['name']}' created successfully!"))
         except FileExistsError:
             logger.info(f"[-] Directory './docs/{category['name']}' already exists.")
         except Exception as e:
             logger.error(f"[-] An error occurred: {e}")
             continue
 
-        logger.info("="*100)
+        logger.info("-"*100)
 
         with open(f"./docs/{category['name']}/articles.json", "w", encoding="utf-8") as f:
             data = requests.get(url+f"/categories/{category['id']}/articles").json()
             articles_per_category[category["name"]] = data["count"]
 
-            print(Colors.log(f"[+] Fetching articles from {data['page']}...", Colors.GRAY))
+            print(logger.info(f"[+] Fetching articles from {data['page']}..."))
             articles = data["articles"]
 
             if data["next_page"] is not None:
                 while data["next_page"] is not None:
-                    print(Colors.log(f"[+] Fetching articles from {data['next_page']}...", Colors.GRAY))
+                    print(logger.info(f"[+] Fetching articles from {data['next_page']}..."))
                     data = requests.get(data["next_page"]).json()
                     articles.extend(data["articles"])
 
@@ -132,13 +137,13 @@ if __name__ == "__main__":
 
             if not os.path.exists(f"./docs/{category['name']}/updated_at.json"):
                 with open(f"./docs/{category['name']}/updated_at.json", "w", encoding="utf-8") as f:
-                    print(Colors.log(f"[+] First updated_at.json created", Colors.GREEN))
+                    print(logger.info(f"[+] First updated_at.json created"))
                     json.dump({article["id"]: article["updated_at"]}, f, ensure_ascii=False)
                     f.close()
                 with open(f"./docs/{category['name']}/{article['title']}.md", "w", encoding="utf-8") as f:
                     f.write(markdown.markdown(article["body"]))
                     f.close()
-                print(Colors.log(f"[+] ADDED: New article '{article['title']}'", Colors.GREEN))
+                print(logger.info(f"[+] ADDED: New article '{article['title']}'"))
                 new_articles += 1
 
 
@@ -149,7 +154,7 @@ if __name__ == "__main__":
                         purpose="assistants"
                     )
                 except Exception as e:
-                    print(Colors.log(f"[-] An OpenAI error occurred: {e}", Colors.RED))
+                    print(logger.error(f"[-] An OpenAI error occurred: {e}"))
 
             else:
                 with open(f"./docs/{category['name']}/updated_at.json", "r", encoding="utf-8") as f:
@@ -160,7 +165,7 @@ if __name__ == "__main__":
                     with open(f"./docs/{category['name']}/{article['title']}.md", "w", encoding="utf-8") as updated_file:
                         updated_file.write(markdown.markdown(article["body"]))
                         updated_file.close()
-                    print(Colors.log(f"[+] ADDED: New article '{article['title']}'", Colors.GREEN))
+                    print(logger.info(f"[+] ADDED: New article '{article['title']}'"))
                     old_updated_at[article["id"]] = article["updated_at"]
                     new_articles += 1
                     
@@ -172,7 +177,7 @@ if __name__ == "__main__":
                         )
                     
                     except Exception as e:
-                        print(Colors.log(f"[-] An OpenAI error occurred: {e}", Colors.RED))
+                        print(logger.error(f"[-] An OpenAI error occurred: {e}"))
 
                 elif datetime.strptime(old_updated_at[str(article["id"])], "%Y-%m-%dT%H:%M:%SZ") < datetime.strptime(article["updated_at"], "%Y-%m-%dT%H:%M:%SZ"):
 
@@ -180,7 +185,7 @@ if __name__ == "__main__":
                         updated_file.write(markdown.markdown(article["body"]))
                         updated_file.close()
 
-                    print(Colors.log(f"[+] UPDATED: Article '{article['title']}'", Colors.YELLOW))
+                    print(logger.info(f"[+] UPDATED: Article '{article['title']}'"))
                     old_updated_at[article["id"]] = article["updated_at"]
                     updated_articles += 1
 
@@ -189,14 +194,14 @@ if __name__ == "__main__":
 
                 else:
                     skipped_articles += 1
-                    print(Colors.log(f"[-] SKIPPED: Article '{article['title']}'", Colors.GRAY))
+                    print(logger.info(f"[-] SKIPPED: Article '{article['title']}'"))
 
                 with open(f"./docs/{category['name']}/updated_at.json", "w", encoding="utf-8") as f:
                     json.dump(old_updated_at, f, ensure_ascii=False)
                     f.close()
 
             total_articles += 1
-        print(Colors.log("-"*100, Colors.YELLOW))
+        print(logger.info("="*100))
 
     logger.info(f"[+] Task completed!")
     logger.info(f"[+] Total articles: {total_articles}")
@@ -249,6 +254,7 @@ if __name__ == "__main__":
                     }
                 }
             )
+            logger.info(f"[+] File '{file.filename}' attached to Vector Store successfully!")
         except Exception as e:
             logger.error(f"[-] An OpenAI error occurred: {e}")
 

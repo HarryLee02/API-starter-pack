@@ -6,7 +6,6 @@ load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-
 count = 0
 
 for file in client.files.list().data:
