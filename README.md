@@ -44,27 +44,42 @@ This project provides an automated solution for:
    ```bash
    pip install -r requirements.txt
    ```
+Required dependencies are:
+- OpenAI
+- requests
+- Markdown
+- python-dotenv
 
 3. **Environment Configuration**
-   Create a `.env` file in the root directory:
+   Create a `.env` file in the root directory base on `env.example`:
    ```env
-   OPENAI_API_KEY=your_openai_api_key_here
-   SUPPORT_URL=https://your-zendesk-instance.zendesk.com/api/v2/help_center
+   OPENAI_API_KEY = your_openai_api_key_here
+
+   OPENAI_VECTOR_STORE_ID = your_vector_store_id
+
+   SUPPORT_URL = https://your-zendesk-instance.zendesk.com/api/v2/help_center
    ```
 
-## 🏃‍♂️ How to Run Locally
-
-### 1. Scrape Documentation
+## 🏃How to Run Locally
+There are 2 options to run this project: `python` or `Docker`
+### Python
+#### 1. Scrape Documentation
 ```bash
-python scraper.py
+# run scraper
+python main.py
+
+# run log server on localhost:8080
+python log-server/app.py
 ```
+
 This will:
-- Fetch all categories from your Zendesk help center
+- Fetch all categories from your Zendesk help center via API
 - Download articles for each category
 - Convert articles to markdown format
 - Upload files to OpenAI for processing
+- Log everything and display on localhost
 
-### 2. Analyze Token Usage
+#### 2. Analyze Token Usage
 ```bash
 python count_tokens.py
 ```
