@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scraper Logs & Docs</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; }
+        .log-content { 
+            background: #f5f5f5; 
+            padding: 15px; 
+            border-radius: 5px; 
+            white-space: pre-wrap; 
+            font-family: monospace;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .timestamp { color: #666; font-size: 12px; }
+        .download-link { 
+            display: inline-block; 
+            margin: 10px 0; 
+            padding: 10px 20px; 
+            background: #007bff; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+        }
+        .download-link:hover { background: #0056b3; }
+        .nav-tabs { 
+            display: flex; 
+            border-bottom: 1px solid #ddd; 
+            margin-bottom: 20px; 
+        }
+        .nav-tab { 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            border: 1px solid transparent; 
+            border-bottom: none; 
+            background: #f8f9fa; 
+        }
+        .nav-tab.active { 
+            background: white; 
+            border-color: #ddd; 
+            border-bottom: 1px solid white; 
+            margin-bottom: -1px; 
+        }
+        .tab-content { 
+            display: none; 
+        }
+        .tab-content.active { 
+            display: block; 
+        }
+        .category { 
+            margin: 15px 0; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+        }
+        .category h3 { 
+            margin: 0 0 10px 0; 
+            color: #333; 
+        }
+        .doc-link { 
+            display: block; 
+            padding: 5px 10px; 
+            margin: 2px 0; 
+            background: #f8f9fa; 
+            color: #333; 
+            text-decoration: none; 
+            border-radius: 3px; 
+        }
+        .doc-link:hover { 
+            background: #e9ecef; 
+        }
+        #docs-content {
+            max-height: 700px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .category {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+        .category h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #495057;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .doc-content { 
+            background: white; 
+            padding: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            margin-top: 0; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Help Center Scraper - Logs & Documents</h1>
+    <p class="timestamp">Last updated: {{ timestamp }}</p>
+    
+    <div class="nav-tabs">
+        <div class="nav-tab active" data-tab="logs">📋 Logs</div>
+        <div class="nav-tab" data-tab="docs">📚 Documents</div>
+    </div>
+    
+    <div id="logs-tab" class="tab-content active">
+        <div class="section">
+            <h2>Latest Scraper Log <span id="status-indicator" style="color: #28a745;">●</span></h2>
+            <a href="/download/scraper.log" class="download-link">Download Log File</a>
+            <button id="refresh-btn" style="padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; margin-left: 10px;">Auto Refresh: ON</button>
+            <div class="log-content" id="log-content">{{ scraper_log }}</div>
+        </div>
+        
+        <div class="section">
+            <h2>Available Log Files</h2>
+            <ul>
+            {% for log_file in log_files %}
+                <li><a href="/download/{{ log_file }}">{{ log_file }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div id="docs-tab" class="tab-content">
+        <div class="section">
+            <h2>Scraped Documents</h2>
+            <div id="docs-content">Loading documents...</div>
+        </div>
+    </div>
+    
+    <script>
+    let autoRefreshInterval;
+    let isAutoRefreshOn = true;
+    
+    // Define all functions first
+    function showTab(tabName, element) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Show selected tab
+        document.getElementById(tabName + '-tab').classList.add('active');
+        element.classList.add('active');
+        
+        // Load docs if docs tab is selected
+        if (tabName === 'docs') {
+            loadDocs();
+        }
+    }
+    
+    function startAutoRefresh() {
+        autoRefreshInterval = setInterval(updateLogs, 2000); // Update every 2 seconds
+    }
+    
+    function stopAutoRefresh() {
+        clearInterval(autoRefreshInterval);
+    }
+    
+    function toggleAutoRefresh() {
+        const btn = document.getElementById('refresh-btn');
+        if (isAutoRefreshOn) {
+            stopAutoRefresh();
+            btn.textContent = 'Auto Refresh: OFF';
+            btn.style.background = '#dc3545';
+            document.getElementById('status-indicator').style.color = '#dc3545';
+        } else {
+            startAutoRefresh();
+            btn.textContent = 'Auto Refresh: ON';
+            btn.style.background = '#007bff';
+            document.getElementById('status-indicator').style.color = '#28a745';
+        }
+        isAutoRefreshOn = !isAutoRefreshOn;
+    }
+    
+    function updateLogs() {
+        fetch('/api/logs')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const logContent = document.getElementById('log-content');
+                    if (logContent.textContent !== data.logs) {
+                        logContent.textContent = data.logs;
+                        logContent.scrollTop = logContent.scrollHeight; // Auto-scroll to bottom
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error updating logs:', error);
+            });
+    }
+    
+    function loadDocs() {
+        document.getElementById('docs-content').innerHTML = '<p>Loading documents...</p>';
+        
+        fetch('/docs')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    displayDocs(data.categories);
+                } else {
+                    document.getElementById('docs-content').innerHTML = '<p>Error loading documents: ' + data.message + '</p>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('docs-content').innerHTML = '<p>Error loading documents: ' + error.message + '</p>';
+            });
+    }
+    
+    function displayDocs(categories) {
+        const docsContent = document.getElementById('docs-content');
+        if (Object.keys(categories).length === 0) {
+            docsContent.innerHTML = '<p>No documents found.</p>';
+            return;
+        }
+        
+        let html = '';
+        for (const [category, files] of Object.entries(categories)) {
+            html += '<div class="category">';
+            html += '<h3>📁 ' + category + ' (' + files.length + ' files)</h3>';
+            for (const file of files) {
+                html += '<a href="#" class="doc-link" onclick="loadDocument(\'' + category + '\', \'' + file + '\')">📄 ' + file + '</a>';
+            }
+            html += '</div>';
+        }
+        docsContent.innerHTML = html;
+    }
+    
+    function loadDocument(category, filename) {
+        fetch('/docs/' + category + '/' + filename)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const docsContent = document.getElementById('docs-content');
+                    docsContent.innerHTML = '<div style="margin-bottom: 20px;">';
+                    docsContent.innerHTML += '<button onclick="loadDocs()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">← Back to Documents</button>';
+                    docsContent.innerHTML += '</div>';
+                    docsContent.innerHTML += '<div class="doc-content">' + data.content + '</div>';
+                } else {
+                    alert('Error loading document: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Error loading document: ' + error.message);
+            });
+    }
+    
+
+    
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set up tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                showTab(tabName, this);
+            });
+        });
+        
+        // Set up auto refresh button
+        document.getElementById('refresh-btn').addEventListener('click', toggleAutoRefresh);
+        
+        // Start auto-refresh
+        startAutoRefresh();
+    });
+    </script>
+</body>
+</html> 

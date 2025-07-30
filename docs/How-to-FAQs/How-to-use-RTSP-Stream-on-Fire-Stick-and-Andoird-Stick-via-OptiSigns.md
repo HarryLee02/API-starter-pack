@@ -1,0 +1,26 @@
+<h4 id="h_01HPZPKA8AJCM6ED3HPEW4W8TK" class="modal-title">Nowadays, RTSP Camera Streaming is popular. You can display your RTSP Stream on your Digital Screen via OptiSigns.<br><img src="https://support.optisigns.com/hc/article_attachments/8098888488595" alt="Support_article_-1.png">
+</h4>
+<p>This article will guide you through how to create and use the RTSP Stream app on the Fire Stick and Andoird Stick. Note: For this feature, you must run OptiSigns player version 5.10.10 or newer on your devices. You can download the latest version of the app at <a href="http://www.optisigns.com/download" target="_blank" rel="noopener noreferrer">https://www.optisigns.com/download</a></p>
+<p>If you want to use Windows or Raspberry Pi to display the RTSP Stream app. The setup will be different. You can click <a href="https://support.optisigns.com/hc/en-us/articles/8066591235603" target="_self">here</a>.</p>
+<h3 id="h_01HPZPKA8APSSNBXV0D5CXZJ7K" class="rich-content-viewer_headerTwo__3f-vr rich-content-viewer_elementSpacing__208Ie blog-post-title-font _3aQMT _2J4pr css-x4x4qs rich-content-viewer_left__2p1aK _158eo _3_7DB"><strong>Let's jump in and get started:</strong></h3>
+<h4 id="h_01HPZPKA8ABPMFG0VGGD8T061R" class="rich-content-viewer_headerTwo__3f-vr rich-content-viewer_elementSpacing__208Ie blog-post-title-font _3aQMT _2J4pr css-x4x4qs rich-content-viewer_left__2p1aK _158eo _3_7DB"><strong>1. How to use it on Fire Stick or Android Stick device. </strong></h4>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Go to our portal: <a class="link-viewer_link__2qJYG blog-link-hashtag-color y_1_u" href="http://app.optisigns.com/" target="_top" rel="noreferrer">http://app.optisigns.com/</a></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Then go to Files/Assets, Click on "App", search for and add RTSP Stream app to your Account.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"><img src="https://support.optisigns.com/hc/article_attachments/26500916181267" alt="mceclip0.png"></p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Enter your RTSP Stream app information:</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB wysiwyg-text-align-center"><img src="https://support.optisigns.com/hc/article_attachments/8099265055251" alt="mceclip0.png" width="599" height="368"></p>
+<ul>
+<li class="rich-content-viewer_elementSpacing__208Ie">
+<u>Name</u>: Name of your RTSP Stream app, this is the name of the app in your asset list. It will <u><strong>not</strong></u> be displayed on your screens.</li>
+<li class="rich-content-viewer_elementSpacing__208Ie">
+<span class="wysiwyg-underline">URL</span>: the URL link to the RTSP Stream link you want to display.</li>
+</ul>
+<p>Here are some free public RTSP URLs:</p>
+<pre>rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4<br><br>rtsp://demo:demo@ipvmdemo.dyndns.org:5541/onvif-media/media.amp?profile=profile_1_h264&amp;sessiontimeout=60&amp;streamtype=unicast</pre>
+<p>Click Save to save your asset.</p>
+<h2 id="h_01HPZPKA8B4TFH72H71ZR1W005" class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">That's all!</h2>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">Congratulation! You have created your RTSP Stream App. Then you can assign it to your Fire Stick or Android Stick</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">You can change the wall at any time by clicking on it in the Files/Assets tab.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">You can put the walls in a Playlist, Schedule too.</p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB"> </p>
+<p class="rich-content-viewer_text__XzvDs rich-content-viewer_elementSpacing__208Ie _3_7DB blog-post-text-font blog-post-text-color rich-content-viewer_left__2p1aK _158eo _3_7DB">If you have any additional questions, concerns, or any feedback about OptiSigns, feel free to reach out to our support team at <a href="mailto:support@optisigns.com" target="_self" rel="undefined">support@optisigns.com</a></p>

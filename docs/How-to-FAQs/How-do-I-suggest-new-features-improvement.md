@@ -1,0 +1,1 @@
+<p>We are always looking for ways to improve our product and customer experience.<br>Please just send us an email to <a href="mailto:support@optisigns.com">support@optisigns.com</a>.<br>No request is too small or silly!</p>

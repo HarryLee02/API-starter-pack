@@ -1,0 +1,1 @@
+<p>Currently there's limit of 10GB of cloud storage per paid screen you have.<br>I.e. if you have 5 paid screens subscription, you will have 50GB.<br>However, if you need more, please just send us an email at <a href="mailto:support@optisigns.com">support@optisigns.com</a></p>

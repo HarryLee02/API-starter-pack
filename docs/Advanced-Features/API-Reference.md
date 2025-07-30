@@ -1,0 +1,2 @@
+<p>If you would like to know more about the API, please click <a translate="no" href="https://api-doc.optisigns.com" target="_self" rel="undefined">API reference</a>.</p>
+<p><strong>Previous Article - <a href="https://support.optisigns.com/hc/en-us/articles/36558469962643-Subscription-Function-in-GraphQL" target="_blank" rel="noopener noreferrer">Subscription Function in GraphQL</a></strong></p>

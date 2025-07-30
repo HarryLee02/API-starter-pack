@@ -70,6 +70,8 @@ if __name__ == "__main__":
     menu()
 
     openai_api_key = os.getenv("OPENAI_API_KEY")
+    vector_store_id = os.getenv("OPENAI_VECTOR_STORE_ID")
+    url = os.getenv("SUPPORT_URL")
 
     client = OpenAI(api_key=openai_api_key)
 
@@ -77,11 +79,12 @@ if __name__ == "__main__":
     skipped_articles = 0
     updated_articles = 0
     new_articles = 0
-    articles_per_category = {}
-    update_ids=[]
-    
-    url = os.getenv("SUPPORT_URL")
 
+    articles_per_category = {}
+    update_file_path = []
+    old_ids_to_delete = []
+    new_update_ids = []
+    
     with open("./categories.json", "w", encoding="utf-8") as f:
         json.dump(requests.get(url+"/categories").json(), f, ensure_ascii=False)
         f.close()
@@ -143,16 +146,29 @@ if __name__ == "__main__":
                 with open(f"./docs/{category['name']}/{article['title']}.md", "w", encoding="utf-8") as f:
                     f.write(markdown.markdown(article["body"]))
                     f.close()
-                print(logger.info(f"[+] ADDED: New article '{article['title']}'"))
-                new_articles += 1
-
-
-                # Create file in OpenAI
+                
                 try:
                     response = client.files.create(
                         file=open(f"./docs/{category['name']}/{article['title']}.md", "rb"),
                         purpose="assistants"
                     )
+
+                    print(logger.info(f"[+] ADDED: New article '{article['title']}'"))
+                    new_articles += 1
+
+                    client.vector_stores.files.create(
+                        vector_store_id=vector_store_id,
+                        file_id=response.id,
+                        chunking_strategy={
+                            "type": "static",
+                            "static": {
+                                "max_chunk_size_tokens": 1200,
+                                "chunk_overlap_tokens": 300    
+                            }
+                        }
+                    )
+                    print(logger.info(f"[+] File '{response.id}' attached to Vector Store successfully!"))
+
                 except Exception as e:
                     print(logger.error(f"[-] An OpenAI error occurred: {e}"))
 
@@ -165,17 +181,28 @@ if __name__ == "__main__":
                     with open(f"./docs/{category['name']}/{article['title']}.md", "w", encoding="utf-8") as updated_file:
                         updated_file.write(markdown.markdown(article["body"]))
                         updated_file.close()
-                    print(logger.info(f"[+] ADDED: New article '{article['title']}'"))
                     old_updated_at[article["id"]] = article["updated_at"]
-                    new_articles += 1
-                    
-                    # Create file in OpenAI
+                                        
                     try:
                         response = client.files.create(
                             file=open(f"./docs/{category['name']}/{article['title']}.md", "rb"),
                             purpose="assistants"
                         )
-                    
+                        print(logger.info(f"[+] ADDED: New article '{article['title']}'"))
+                        new_articles += 1
+
+                        client.vector_stores.files.create(
+                            vector_store_id=vector_store_id,
+                            file_id=response.id,
+                            chunking_strategy={
+                                "type": "static",
+                                "static": {
+                                    "max_chunk_size_tokens": 1200,
+                                    "chunk_overlap_tokens": 300    
+                                }
+                            }
+                        )
+                        print(logger.info(f"[+] File '{response.id}' attached to Vector Store successfully!"))
                     except Exception as e:
                         print(logger.error(f"[-] An OpenAI error occurred: {e}"))
 
@@ -189,7 +216,7 @@ if __name__ == "__main__":
                     old_updated_at[article["id"]] = article["updated_at"]
                     updated_articles += 1
 
-                    update_ids.append({"file_name": f"{article['title']}.md",
+                    update_file_path.append({"file_name": f"{article['title']}.md",
                                        "file_path": f"./docs/{category['name']}/{article['title']}.md"})
 
                 else:
@@ -219,33 +246,36 @@ if __name__ == "__main__":
 
     current_list = client.files.list().data
 
-    ids_to_delete = []
-
-    if len(update_ids) > 0:
+    if len(update_file_path) > 0:
         for file in current_list:
-            if file.filename in update_ids:
-                ids_to_delete.append(file.id)
+            if file.filename in update_file_path:
+                old_ids_to_delete.append(file.id)
         
-        for id in ids_to_delete:
+        for id in old_ids_to_delete:
             client.files.delete(id)
         
-        for file in update_ids:
-            client.files.create(
+        for file in update_file_path:
+            new_update_ids.append(client.files.create(
                 file=open(file["file_path"], "rb"),
                 purpose="assistants"
-            )
+            ).id)
         
     logger.info("[+] Updated files successfully!")
 
-    logger.info("[+] Attach files to Vector Store")
+    logger.info("[+] Attach updated files to Vector Store")
 
-    vector_store_id = os.getenv("OPENAI_VECTOR_STORE_ID")
+    for id in old_ids_to_delete:
+        try:
+            client.vector_stores.files.delete(vector_store_id=vector_store_id, file_id=id)
+            logger.info(f"[+] File '{id}' deleted from Vector Store successfully!")
+        except Exception as e:
+            logger.error(f"[-] An OpenAI error occurred: {e}")
     
-    for file in client.files.list().data:
+    for id in new_update_ids:
         try:
             client.vector_stores.files.create(
                 vector_store_id=vector_store_id,
-                file_id=file.id,
+                file_id=id,
                 chunking_strategy={
                     "type": "static",
                     "static": {
@@ -254,10 +284,9 @@ if __name__ == "__main__":
                     }
                 }
             )
-            logger.info(f"[+] File '{file.filename}' attached to Vector Store successfully!")
+            logger.info(f"[+] File '{id}' updated to Vector Store successfully!")
         except Exception as e:
             logger.error(f"[-] An OpenAI error occurred: {e}")
 
-    logger.info("[+] Files attached to Vector Store successfully!")
     logger.info("[+] Task completed!")
     exit()

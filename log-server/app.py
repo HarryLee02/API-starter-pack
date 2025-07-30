@@ -1,111 +1,9 @@
-from flask import Flask, render_template_string, send_file
+from flask import Flask, render_template, send_file
 import os
 from datetime import datetime
+import markdown
 
-app = Flask(__name__)
-
-# HTML template for the logs page
-HTML_TEMPLATE = """
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Scraper Logs</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .log-section { margin: 20px 0; }
-        .log-content { 
-            background: #f5f5f5; 
-            padding: 15px; 
-            border-radius: 5px; 
-            white-space: pre-wrap; 
-            font-family: monospace;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        .timestamp { color: #666; font-size: 12px; }
-        .download-link { 
-            display: inline-block; 
-            margin: 10px 0; 
-            padding: 10px 20px; 
-            background: #007bff; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 5px; 
-        }
-        .download-link:hover { background: #0056b3; }
-    </style>
-</head>
-<body>
-    <h1>Help Center Scraper Logs</h1>
-    <p class="timestamp">Last updated: {{ timestamp }}</p>
-    
-    <div class="log-section">
-        <h2>Latest Scraper Log <span id="status-indicator" style="color: #28a745;">●</span></h2>
-        <a href="/download/scraper.log" class="download-link">Download Log File</a>
-        <button onclick="toggleAutoRefresh()" id="refresh-btn" style="padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; margin-left: 10px;">Auto Refresh: ON</button>
-        <div class="log-content" id="log-content">{{ scraper_log }}</div>
-    </div>
-    
-    <div class="log-section">
-        <h2>Available Log Files</h2>
-        <ul>
-        {% for log_file in log_files %}
-            <li><a href="/download/{{ log_file }}">{{ log_file }}</a></li>
-        {% endfor %}
-        </ul>
-    </div>
-    
-    <script>
-    let autoRefreshInterval;
-    let isAutoRefreshOn = true;
-    
-    // Start auto-refresh on page load
-    startAutoRefresh();
-    
-    function startAutoRefresh() {
-        autoRefreshInterval = setInterval(updateLogs, 2000); // Update every 2 seconds
-    }
-    
-    function stopAutoRefresh() {
-        clearInterval(autoRefreshInterval);
-    }
-    
-    function toggleAutoRefresh() {
-        const btn = document.getElementById('refresh-btn');
-        if (isAutoRefreshOn) {
-            stopAutoRefresh();
-            btn.textContent = 'Auto Refresh: OFF';
-            btn.style.background = '#dc3545';
-            document.getElementById('status-indicator').style.color = '#dc3545';
-        } else {
-            startAutoRefresh();
-            btn.textContent = 'Auto Refresh: ON';
-            btn.style.background = '#007bff';
-            document.getElementById('status-indicator').style.color = '#28a745';
-        }
-        isAutoRefreshOn = !isAutoRefreshOn;
-    }
-    
-    function updateLogs() {
-        fetch('/api/logs')
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    const logContent = document.getElementById('log-content');
-                    if (logContent.textContent !== data.logs) {
-                        logContent.textContent = data.logs;
-                        logContent.scrollTop = logContent.scrollHeight; // Auto-scroll to bottom
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error updating logs:', error);
-            });
-    }
-    </script>
-</body>
-</html>
-"""
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
 
 @app.route('/')
 def logs():
@@ -126,10 +24,10 @@ def logs():
     if os.path.exists('./logs'):
         log_files = [f for f in os.listdir('./logs') if f.endswith('.log')]
     
-    return render_template_string(HTML_TEMPLATE, 
-                                timestamp=timestamp,
-                                scraper_log=scraper_log,
-                                log_files=log_files)
+    return render_template('index.html', 
+                         timestamp=timestamp,
+                         scraper_log=scraper_log,
+                         log_files=log_files)
 
 @app.route('/api/logs')
 def get_logs():
@@ -156,6 +54,70 @@ def download_log(filename):
 def health():
     """Health check endpoint"""
     return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
+@app.route('/docs')
+def docs():
+    """List all scraped documents by category"""
+    try:
+        if os.path.exists('./docs'):
+            categories = {}
+            for root, dirs, files in os.walk('./docs'):
+                # Get category name (folder name)
+                category = os.path.basename(root)
+                if category != 'docs':  # Skip root docs folder
+                    if category not in categories:
+                        categories[category] = []
+                    
+                    # Add only markdown files in this category (exclude JSON files)
+                    for file in files:
+                        if file.endswith('.md') and not file.endswith('.json'):
+                            categories[category].append(file)
+            
+            return {"status": "success", "categories": categories}
+        else:
+            return {"status": "error", "message": "No docs directory found"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.route('/docs/<category>')
+def get_category(category):
+    """Get all documents in a specific category"""
+    try:
+        category_path = os.path.join('./docs', category)
+        if os.path.exists(category_path) and os.path.isdir(category_path):
+            files = []
+            for file in os.listdir(category_path):
+                if file.endswith('.md') and not file.endswith('.json'):
+                    files.append(file)
+            return {"status": "success", "category": category, "files": files}
+        else:
+            return {"status": "error", "message": f"Category '{category}' not found"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.route('/docs/<category>/<filename>')
+def get_doc(category, filename):
+    """Get a specific document from a category"""
+    try:
+        doc_path = os.path.join('./docs', category, filename)
+        if os.path.exists(doc_path) and filename.endswith('.md') and not filename.endswith('.json'):
+            with open(doc_path, 'r', encoding='utf-8') as f:
+                markdown_content = f.read()
+            
+            # Convert markdown to HTML
+            html_content = markdown.markdown(markdown_content, extensions=['tables', 'fenced_code', 'codehilite'])
+            
+            return {
+                "status": "success", 
+                "content": html_content, 
+                "raw_content": markdown_content,
+                "category": category, 
+                "filename": filename
+            }
+        else:
+            return {"status": "error", "message": "Document not found"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080) 
