@@ -1,6 +1,7 @@
 services:
   scraper:
     build: .
+    image: scraper:latest
     container_name: help-center-scraper
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -12,6 +13,7 @@ services:
 
   log-server:
     build: ./log-server
+    image: log-server:latest
     container_name: log-server
     ports:
       - "8080:8080"
@@ -22,4 +24,6 @@ services:
 
 volumes:
   scraper-logs:
-  docs-volume: 
+    name: scraper-logs
+  docs-volume:
+    name: docs-volume
