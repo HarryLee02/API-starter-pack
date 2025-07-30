@@ -182,7 +182,7 @@ if __name__ == "__main__":
                         updated_file.write(markdown.markdown(article["body"]))
                         updated_file.close()
                     old_updated_at[article["id"]] = article["updated_at"]
-                                        
+
                     try:
                         response = client.files.create(
                             file=open(f"./docs/{category['name']}/{article['title']}.md", "rb"),
@@ -248,17 +248,20 @@ if __name__ == "__main__":
 
     if len(update_file_path) > 0:
         for file in current_list:
-            if file.filename in update_file_path:
-                old_ids_to_delete.append(file.id)
+            for update_file in update_file_path:
+                if file.filename == update_file["file_name"]:
+                    old_ids_to_delete.append(file.id)
+                    break
         
         for id in old_ids_to_delete:
             client.files.delete(id)
-        
+            print(logger.info(f"[+] Deleted file '{id}'"))
         for file in update_file_path:
             new_update_ids.append(client.files.create(
                 file=open(file["file_path"], "rb"),
                 purpose="assistants"
             ).id)
+            print(logger.info(f"[+] Added file '{file['file_name']}'"))
         
     logger.info("[+] Updated files successfully!")
 
