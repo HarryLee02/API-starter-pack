@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source .env
-docker run --rm \
+docker run -d --rm \
   -v scraper-logs:/app/logs \
   -v docs-volume:/app/docs \
   -e OPENAI_API_KEY="$OPENAI_API_KEY" \
