@@ -13,7 +13,7 @@ Document view:
 Assistant demo:
 ![](static/chat_demo.png)
 
-
+There are more result pictures in [static/](static/)
 ## 🚀 Overview
 
 This project provides an automated solution for:
@@ -21,7 +21,7 @@ This project provides an automated solution for:
 - Processing and organizing documentation into structured formats
 - Analyzing token usage and content distribution
 - Preparing data for AI-powered assistants and vector stores
-- **Docker containerization** with reverse proxy for production deployment
+- Docker containerization with reverse proxy for production deployment
 
 ## ✨ Features
 
