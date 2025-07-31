@@ -1,5 +1,5 @@
 logs.harrylee.id.vn {
-    reverse_proxy log-server:8080{
+    reverse_proxy log-server:8080 {
       flush_interval -1
     }
 }
