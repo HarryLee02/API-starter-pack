@@ -6,6 +6,14 @@ A comprehensive tool for processing and analyzing Zendesk help center documentat
 
 🌐 **Live Demo**: https://logs.harrylee.id.vn/
 
+Logs view:
+![](static/frontend.png)
+Document view:
+![](static/frontend_2.png)
+Assistant demo:
+![](static/chat_demo.png)
+
+
 ## 🚀 Overview
 
 This project provides an automated solution for:
