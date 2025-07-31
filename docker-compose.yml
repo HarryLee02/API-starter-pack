@@ -10,20 +10,45 @@ services:
     volumes:
       - scraper-logs:/app/logs
       - docs-volume:/app/docs
+    networks:
+      - api-starter-pack-network
 
   log-server:
     build: ./log-server
     image: log-server:latest
     container_name: log-server
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     volumes:
       - scraper-logs:/app/logs
       - docs-volume:/app/docs
     restart: unless-stopped
+    networks:
+      - api-starter-pack-network
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - api-starter-pack-network
 
 volumes:
   scraper-logs:
     name: scraper-logs
   docs-volume:
     name: docs-volume
+  caddy_data:
+    name: caddy_data
+  caddy_config:
+    name: caddy_config
+
+networks:
+  api-starter-pack-network:
